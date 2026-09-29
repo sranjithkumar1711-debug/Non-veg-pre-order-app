@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Non-Veg Pre-Order</title>
+<style>
+body{font-family:sans-serif; padding:15px; background:#fff8f0;}
+.card{border:1px solid #ddd; padding:15px; margin:10px 0; border-radius:10px; text-align:center;}
+button{background:#e63900; color:white; padding:12px; border:none; width:100%; border-radius:8px; font-size:16px;}
+input, select{width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc;}
+</style>
+</head>
+<body>
+<h2>🍗 Non-Veg Pre-Order Shop</h2>
+
+<div class="card">
+<h3>Category</h3>
+<select id="category">
+<option value="chicken">Chicken</option>
+<option value="mutton">Mutton</option>
+<option value="fish">Fish</option>
+</select>
+</div>
+
+<div class="card" style="background:#ffe6e6;">
+<h3>🍗 Leg Piece Pre-Order</h3>
+<button onclick="setLegPiece()">Only Leg Piece Order</button>
+</div>
+
+<div class="card">
+<input id="name" placeholder="Unga Name">
+<input id="phone" placeholder="Phone Number">
+<select id="variety">
+<option>Leg Piece</option><option>Full Chicken</option><option>Breast</option>
+<option>Mutton With Bone</option><option>Mutton Boneless</option>
+<option>Vanjaram</option><option>Sankara</option><option>Prawn</option>
+</select>
+<select id="quantity">
+<option>1 kg</option><option>2 kg</option><option>5 pcs</option><option>10 pcs</option>
+</select>
+<select id="slot">
+<option value="morning">Morning (7-11)</option>
+<option value="afternoon">Afternoon (11-3)</option>
+<option value="evening">Evening (3-8)</option>
+</select>
+<button onclick="placeOrder()">Pre-Order Confirm</button>
+<p id="msg"></p>
+</div>
+
+<script>
+const BACKEND_URL = "https://unga-render-link.onrender.com"; // itha maathunga
+function setLegPiece(){
+  document.getElementById('category').value='chicken';
+  document.getElementById('variety').value='Leg Piece';
+  alert('Leg Piece selected!');
+}
+async function placeOrder(){
+  const data = {
+    name: document.getElementById('name').value,
+    phone: document.getElementById('phone').value,
+    category: document.getElementById('category').value,
+    variety: document.getElementById('variety').value,
+    quantity: document.getElementById('quantity').value,
+    slot: document.getElementById('slot').value
+  };
+  const res = await fetch(BACKEND_URL + '/api/preorder', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  });
+  const out = await res.json();
+  document.getElementById('msg').innerText = out.success ? 'Order Success! ID: ' + out.orderId : 'Error!';
+}
+</script>
+</body>
+</html>
